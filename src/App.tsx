@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import GetStarted from './pages/GetStarted';
+import CoursesOverview from './pages/CoursesOverview';
 import PythonAICourse from './pages/PythonAICourse';
 import BlenderCourse from './pages/BlenderCourse';
 import UnityGameCourse from './pages/UnityGameCourse';
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/get-started" element={<GetStarted />} />
+            <Route path="/courses" element={<CoursesOverview />} />
             <Route path="/courses/python-ai" element={<PythonAICourse />} />
             <Route path="/courses/3d-modeling" element={<BlenderCourse />} />
             <Route path="/courses/unity-dev" element={<UnityGameCourse />} />
