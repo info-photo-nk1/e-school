@@ -41,13 +41,14 @@ export const blenderCourse: Module[] = [
     id: "module-1",
     title: "Getting Started with Blender",
     description: "Learn the fundamentals of Blender and 3D modeling basics",
-    totalDuration: 150, // 2.5時間
+    totalDuration: 200, // 3.3時間
     lessons: [
       {
         id: "1-1",
         title: "Introduction to 3D Modeling",
         description: "Understanding the world of 3D graphics and what makes Blender special",
         duration: 20,
+        videoUrl: "https://example.com/videos/blender-intro.mp4",
         content: `# Welcome to 3D Modeling with Blender
 
 ## What is 3D Modeling?
@@ -93,6 +94,7 @@ Let's begin your journey into the exciting world of 3D modeling!`,
         title: "Navigating the Blender Interface",
         description: "Master the Blender interface and learn to navigate in 3D space",
         duration: 30,
+        videoUrl: "https://example.com/videos/blender-interface.mp4",
         content: `# Navigating the Blender Interface
 
 ## Blender's Default Layout
@@ -159,6 +161,7 @@ Practice these navigation techniques - they'll become second nature!`,
         title: "Essential Tools and Interface Elements",
         description: "Learn the most important tools and interface elements you'll use daily",
         duration: 40,
+        videoUrl: "https://example.com/videos/blender-tools.mp4",
         content: `# Essential Tools and Interface Elements
 
 ## The Tool Shelf (Left Side)
@@ -259,6 +262,7 @@ Practice these tools with the default cube!`,
         title: "Basic Mesh Modeling",
         description: "Create your first 3D model by learning basic mesh editing techniques",
         duration: 60,
+        videoUrl: "https://example.com/videos/blender-mesh-modeling.mp4",
         content: `# Basic Mesh Modeling
 
 ## Understanding Meshes
@@ -377,6 +381,179 @@ This is your first 3D model!`,
             type: "document",
             url: "/resources/mesh-editing-guide.pdf",
             description: "Complete guide to mesh editing tools and techniques"
+          }
+        ]
+      },
+      {
+        id: "1-5",
+        title: "Complete Practice Project - Building Your First Character",
+        description: "Apply everything you've learned to create a simple but complete 3D character",
+        duration: 50,
+        videoUrl: "https://example.com/videos/blender-first-character.mp4",
+        content: `# Complete Practice Project - Building Your First Character
+
+## Project Overview
+
+Congratulations! You've learned the fundamentals of Blender. Now it's time to put everything together and create your first complete 3D character. Don't worry - we'll start simple and build up complexity.
+
+## What We'll Create
+
+We'll be creating a simple but charming robot character called "Robo-Friend" that incorporates all the skills you've learned:
+- Basic mesh modeling (cube manipulation)
+- Interface navigation 
+- Essential tools (move, rotate, scale)
+- Mesh editing (extrude, inset, loop cuts)
+
+## Project Planning
+
+### Character Design
+- **Head**: Modified cube with face details
+- **Body**: Rounded rectangular torso
+- **Arms**: Simple cylindrical limbs
+- **Legs**: Basic geometric shapes
+- **Details**: Antenna, buttons, simple features
+
+## Step-by-Step Character Creation
+
+### Step 1: Setting Up the Scene
+1. Open Blender with default scene
+2. Delete the default cube (X > Delete)
+3. Save your project as "RoboFriend_v1.blend"
+
+### Step 2: Creating the Head
+1. Add a new cube (Shift + A > Mesh > Cube)
+2. Scale it slightly (S > 1.2 > Enter)
+3. Enter Edit Mode (Tab)
+4. Select the front face (3 for face mode)
+5. Inset for eye sockets (I > move mouse > click)
+6. Extrude slightly inward (E > move inward)
+
+### Step 3: Building the Body
+1. Exit Edit Mode (Tab)
+2. Add another cube for the body
+3. Scale it on Z-axis (S > Z > 1.5)
+4. Scale it on X and Y (S > Shift + Z > 0.8)
+5. Position below the head (G > Z > move down)
+
+### Step 4: Adding Arms
+1. Add a cylinder (Shift + A > Mesh > Cylinder)
+2. Rotate 90 degrees (R > Y > 90 > Enter)
+3. Scale it thin (S > Shift + X > 0.3)
+4. Position on one side of body
+5. Duplicate for other arm (Shift + D > X > move)
+
+### Step 5: Creating Legs
+1. Add another cylinder for leg
+2. Scale it (S > Z > 1.2) for length
+3. Position below body
+4. Duplicate for second leg
+5. Separate them slightly
+
+### Step 6: Adding Character Details
+1. Add small cubes for buttons on chest
+2. Create antenna with cylinder
+3. Add simple feet with scaled cubes
+4. Position everything nicely
+
+### Step 7: Final Touches
+1. Select all objects (A)
+2. Join them together (Ctrl + J)
+3. Enter Edit Mode and clean up any issues
+4. Add a simple material color
+5. Position camera for good view
+6. Render your character (F12)
+
+## Tips for Success
+
+### Problem-Solving
+- **Objects not visible?** Check if they're hidden in Outliner
+- **Can't select properly?** Make sure you're in the right mode
+- **Proportions look off?** Use orthographic views (Numpad 1, 3, 7)
+- **Lost in 3D space?** Press Home or Numpad Period to frame objects
+
+### Best Practices
+- Save frequently (Ctrl + S)
+- Name your objects clearly in the Outliner
+- Use layer organization for complex scenes
+- Keep reference images for inspiration
+
+## Character Variations
+
+Once you complete Robo-Friend, try these variations:
+- **Robo-Pet**: Create a four-legged robot companion
+- **Robo-Warrior**: Add armor details and weapons
+- **Robo-Builder**: Include construction tools and equipment
+
+## Project Deliverables
+
+By the end of this lesson, you should have:
+- A complete 3D robot character
+- Understanding of full modeling workflow
+- Experience with project organization
+- Confidence to tackle more complex models
+
+Remember: This is your first character - it doesn't need to be perfect! The goal is to practice and understand the complete process from start to finish.`,
+        exercises: [
+          {
+            id: "e1-5-1",
+            title: "Build Robo-Friend",
+            description: "Follow the complete tutorial to create your first 3D character",
+            instructions: [
+              "Set up a new Blender scene and save as 'RoboFriend_v1.blend'",
+              "Create the head using a modified cube with inset eye sockets",
+              "Build the body with a scaled cube positioned below the head",
+              "Add cylindrical arms rotated and positioned on both sides",
+              "Create legs using cylinders scaled for proper proportions",
+              "Add character details like buttons, antenna, and feet",
+              "Join all parts together and clean up the mesh",
+              "Apply basic materials and render a final image"
+            ],
+            solution: "Your Robo-Friend should be a cohesive 3D character with distinct head, body, arms, and legs, all properly proportioned and positioned. The character should demonstrate mastery of basic modeling tools including extrude, inset, scale, rotate, and move operations."
+          },
+          {
+            id: "e1-5-2",
+            title: "Character Variation Challenge",
+            description: "Create your own unique robot character variant",
+            instructions: [
+              "Brainstorm a unique robot character concept",
+              "Sketch or plan your character design",
+              "Use the same basic techniques but modify proportions and details",
+              "Add at least 3 unique elements not in the tutorial",
+              "Experiment with different shapes and combinations",
+              "Document your creative process",
+              "Render multiple angles of your character"
+            ],
+            solution: "A unique robot character that demonstrates creativity while using the fundamental techniques learned. Should show personal artistic expression and problem-solving skills."
+          }
+        ],
+        resources: [
+          {
+            id: "r1-5-1",
+            title: "RoboFriend Reference Images",
+            type: "download",
+            url: "/resources/robofriend-reference.zip",
+            description: "Reference images and concept art for the robot character project"
+          },
+          {
+            id: "r1-5-2",
+            title: "Blender Project Template",
+            type: "download",
+            url: "/resources/character-template.blend",
+            description: "Starting Blender file with proper scene setup and reference objects"
+          },
+          {
+            id: "r1-5-3",
+            title: "Character Modeling Checklist",
+            type: "document",
+            url: "/resources/character-checklist.pdf",
+            description: "Step-by-step checklist to ensure your character is complete"
+          },
+          {
+            id: "r1-5-4",
+            title: "Troubleshooting Guide",
+            type: "document",
+            url: "/resources/modeling-troubleshooting.pdf",
+            description: "Common problems and solutions for 3D modeling beginners"
           }
         ]
       }

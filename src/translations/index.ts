@@ -318,6 +318,63 @@ export const translations = {
       hoursShort: 'h',
       minutesShort: 'm'
     },
+    courseDashboard: {
+      notFound: {
+        title: 'Course Not Found',
+        description: 'The specified course does not exist.',
+        backToCourses: 'Back to Course List'
+      },
+      breadcrumb: {
+        home: 'Home',
+        courses: 'Courses'
+      },
+      progress: 'Progress',
+      overview: {
+        title: 'Course Overview',
+        completedLessons: 'Completed Lessons',
+        studyTime: 'Study Time (min)',
+        progressRate: 'Progress Rate',
+        remainingTime: 'Remaining Time (hours)'
+      },
+      nextLesson: {
+        title: '📚 Next Recommended Lesson',
+        startButton: 'Start'
+      },
+      lessonList: {
+        title: 'Lesson List',
+        lesson: 'Lesson',
+        studiedTime: 'Studied',
+        completed: 'Completed'
+      },
+      goals: {
+        title: 'Learning Goals',
+        goal1: 'Master Blender basics',
+        goal2: 'Understand 3D modeling fundamentals',
+        goal3: 'Create original characters'
+      },
+      achievements: {
+        title: 'Achievement Badges',
+        firstCompletion: {
+          title: 'First Completion',
+          description: 'Completed first lesson'
+        },
+        continuousLearning: {
+          title: 'Continuous Learning',
+          description: 'Completed 3 lessons'
+        },
+        courseCompletion: {
+          title: 'Course Completion',
+          description: 'Completed all lessons'
+        }
+      },
+      stats: {
+        title: 'Learning Statistics',
+        weeklyTime: 'This week\'s study time',
+        avgSession: 'Average session time',
+        lastStudy: 'Last study',
+        today: 'Today'
+      }
+    },
     footer: {
       about: 'Master digital skills with AI-powered learning in your preferred language.',
       platform: 'Platform',
@@ -637,6 +694,63 @@ export const translations = {
       minutes: '分',
       hoursShort: '時間',
       minutesShort: '分'
+    },
+    courseDashboard: {
+      notFound: {
+        title: 'コースが見つかりません',
+        description: '指定されたコースは存在しません。',
+        backToCourses: 'コース一覧に戻る'
+      },
+      breadcrumb: {
+        home: 'ホーム',
+        courses: 'コース'
+      },
+      progress: '進捗',
+      overview: {
+        title: 'コース概要',
+        completedLessons: '完了レッスン',
+        studyTime: '学習時間(分)',
+        progressRate: '進捗率',
+        remainingTime: '残り時間(時)'
+      },
+      nextLesson: {
+        title: '📚 次の推奨レッスン',
+        startButton: '開始する'
+      },
+      lessonList: {
+        title: 'レッスン一覧',
+        lesson: 'レッスン',
+        studiedTime: '学習済み',
+        completed: '完了'
+      },
+      goals: {
+        title: '学習目標',
+        goal1: 'Blenderの基本操作をマスター',
+        goal2: '3Dモデリングの基礎理解',
+        goal3: 'オリジナルキャラクター作成'
+      },
+      achievements: {
+        title: '達成バッジ',
+        firstCompletion: {
+          title: '初回完了',
+          description: '最初のレッスンを完了'
+        },
+        continuousLearning: {
+          title: '継続学習',
+          description: '3つのレッスンを完了'
+        },
+        courseCompletion: {
+          title: 'コース完了',
+          description: '全てのレッスンを完了'
+        }
+      },
+      stats: {
+        title: '学習統計',
+        weeklyTime: '今週の学習時間',
+        avgSession: '平均セッション時間',
+        lastStudy: '最後の学習',
+        today: '今日'
+      }
     },
     footer: {
       about: 'AI支援型学習で、あなたの言語でデジタルスキルを習得できます。',

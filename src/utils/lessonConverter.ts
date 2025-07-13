@@ -13,48 +13,220 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
   // コンテンツをセクションに分割
   const sections: LessonSection[] = [];
   
-  // 1. イントロダクションセクション
-  sections.push({
-    id: `${lesson.id}-intro`,
-    type: 'introduction',
-    title: `${lesson.title} - 概要`,
-    estimatedTime: Math.ceil(lesson.duration * 0.2), // 20%の時間を概要に
-    order: 0,
-    content: {
-      text: [
-        {
-          id: `${lesson.id}-intro-heading`,
-          type: 'heading',
-          level: 2,
-          content: lesson.title
-        },
-        {
-          id: `${lesson.id}-intro-desc`,
-          type: 'paragraph',
-          content: lesson.description
-        },
-        {
-          id: `${lesson.id}-intro-time`,
-          type: 'callout',
-          style: 'info',
-          content: `このレッスンの予想学習時間: ${lesson.duration}分`
+  // Introduction to 3D Modeling レッスン専用の処理
+  if (lesson.id === '1-1') {
+    // 1. What is 3D Modeling?
+    sections.push({
+      id: `${lesson.id}-what-is-3d`,
+      type: 'concept',
+      title: 'What is 3D Modeling?',
+      estimatedTime: 8,
+      order: 0,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-what-is-3d-heading`,
+            type: 'heading',
+            level: 2,
+            content: 'What is 3D Modeling?'
+          },
+          {
+            id: `${lesson.id}-what-is-3d-definition`,
+            type: 'paragraph',
+            content: '3D modeling is the process of creating a mathematical coordinate-based representation of any surface of an object in three dimensions via specialized software.'
+          },
+          {
+            id: `${lesson.id}-what-is-3d-explanation`,
+            type: 'paragraph',
+            content: '3Dモデリングは、特殊なソフトウェアを使用して、オブジェクトの表面を三次元で数学的に表現する技術です。現実世界の物体や想像上のキャラクターを仮想空間で作り出すことができます。'
+          },
+          {
+            id: `${lesson.id}-what-is-3d-uses`,
+            type: 'list',
+            content: '• 映画やアニメーションの制作\n• ゲーム開発\n• 建築や製品設計\n• 医療や科学的可視化\n• VR/ARコンテンツ制作'
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 30  // 30秒に短縮でより早く次のセクションへ進める
         }
-      ]
-    },
-    completionCriteria: {
-      type: 'time-based',
-      requirements: {
-        minimumTime: 30 // 30秒
       }
+    });
+
+    // 2. Why Blender?
+    sections.push({
+      id: `${lesson.id}-why-blender`,
+      type: 'concept',
+      title: 'Why Blender?',
+      estimatedTime: 8,
+      order: 1,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-why-blender-heading`,
+            type: 'heading',
+            level: 2,
+            content: 'Why Blender?'
+          },
+          {
+            id: `${lesson.id}-why-blender-intro`,
+            type: 'paragraph',
+            content: 'Blender is a free and open-source 3D creation suite that supports the entirety of the 3D pipeline.'
+          },
+          {
+            id: `${lesson.id}-why-blender-features`,
+            type: 'callout',
+            style: 'info',
+            content: 'Blenderが支援する機能:'
+          },
+          {
+            id: `${lesson.id}-why-blender-list`,
+            type: 'list',
+            content: '• モデリング、リギング、アニメーション\n• シミュレーション、レンダリング\n• コンポジティングとモーショントラッキング\n• ビデオ編集とゲーム制作\n• スクリプティングとカスタマイゼーション'
+          },
+          {
+            id: `${lesson.id}-why-blender-advantages`,
+            type: 'callout',
+            style: 'success',
+            content: '完全無料でプロレベルの機能を提供し、活発なコミュニティサポートがあります'
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 30  // Why Blenderセクションも30秒に短縮
+        }
+      }
+    });
+
+    // 3. Course Overview
+    sections.push({
+      id: `${lesson.id}-course-overview`,
+      type: 'concept',
+      title: 'Course Overview',
+      estimatedTime: 8,
+      order: 2,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-course-overview-heading`,
+            type: 'heading',
+            level: 2,
+            content: 'Course Overview'
+          },
+          {
+            id: `${lesson.id}-course-overview-intro`,
+            type: 'paragraph',
+            content: 'このコースでは、Blenderの基礎から実践的な3Dモデリングまでを段階的に学習します。'
+          },
+          {
+            id: `${lesson.id}-course-overview-objectives`,
+            type: 'callout',
+            style: 'info',
+            content: 'このコースで学ぶこと:'
+          },
+          {
+            id: `${lesson.id}-course-overview-list`,
+            type: 'list',
+            content: '1. **Basic Navigation** - 3D空間での移動方法\n2. **Essential Tools** - 最も頻繁に使用するツール\n3. **Modeling Techniques** - ゼロから3Dオブジェクトを作成\n4. **Materials & Texturing** - モデルをリアルに見せる方法\n5. **Lighting & Rendering** - 作品を生き生きとさせる技術'
+          },
+          {
+            id: `${lesson.id}-course-overview-project`,
+            type: 'callout',
+            style: 'success',
+            content: '最終プロジェクト: オリジナルロボットキャラクター "Robo-Friend" の制作'
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 60
+        }
+      }
+    });
+
+    // 4. 実演動画
+    if (lesson.videoUrl) {
+      sections.push({
+        id: `${lesson.id}-video`,
+        type: 'demonstration',
+        title: '実演動画',
+        estimatedTime: 6,
+        order: 3,
+        content: {
+          text: [
+            {
+              id: `${lesson.id}-video-intro`,
+              type: 'paragraph',
+              content: 'Blenderの基本的な操作と今後のレッスンで学ぶ内容をプレビューします。'
+            }
+          ],
+          media: [
+            {
+              id: `${lesson.id}-main-video`,
+              type: 'video',
+              url: lesson.videoUrl,
+              caption: `${lesson.title}の実演動画`
+            }
+          ]
+        },
+        completionCriteria: {
+          type: 'interaction-based',
+          requirements: {
+            requiredInteractions: [`${lesson.id}-main-video`]
+          }
+        }
+      });
     }
-  });
+  } else {
+    // 他のレッスン用の既存の処理
+    // 1. イントロダクションセクション
+    sections.push({
+      id: `${lesson.id}-intro`,
+      type: 'introduction',
+      title: `${lesson.title} - 概要`,
+      estimatedTime: Math.ceil(lesson.duration * 0.2), // 20%の時間を概要に
+      order: 0,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-intro-heading`,
+            type: 'heading',
+            level: 2,
+            content: lesson.title
+          },
+          {
+            id: `${lesson.id}-intro-desc`,
+            type: 'paragraph',
+            content: lesson.description
+          },
+          {
+            id: `${lesson.id}-intro-time`,
+            type: 'callout',
+            style: 'info',
+            content: `このレッスンの予想学習時間: ${lesson.duration}分`
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 30 // 30秒
+        }
+      }
+    });
 
-  // 2. メインコンテンツセクション
-  const contentSections = parseContentIntoSections(lesson.content, lesson.id);
-  sections.push(...contentSections);
+    // 2. メインコンテンツセクション
+    const contentSections = parseContentIntoSections(lesson.content, lesson.id);
+    sections.push(...contentSections);
+  }
 
-  // 3. 動画セクション（動画がある場合）
-  if (lesson.videoUrl) {
+  // 3. 動画セクション（動画がある場合、他のレッスン用）
+  if (lesson.videoUrl && lesson.id !== '1-1') {
     sections.push({
       id: `${lesson.id}-video`,
       type: 'demonstration',

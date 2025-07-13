@@ -11,6 +11,7 @@ import {
 import InteractiveSectionCard from './InteractiveSectionCard';
 import ProgressTracker from './ProgressTracker';
 import { useTranslation } from '../../hooks/useTranslation';
+import Breadcrumb, { BreadcrumbItem } from '../Breadcrumb';
 
 interface EnhancedLessonContentProps {
   lesson: EnhancedLesson;
@@ -62,6 +63,8 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
   // セクションが解除されているかチェック
   const isSectionUnlocked = (index: number) => {
     if (index === 0) return true; // 最初のセクションは常に解除
+    // Introduction to 3D Modeling レッスン(1-1)の場合、全てのセクションに自由にアクセス可能
+    if (lesson.id === '1-1') return true;
     return userProgress.sectionsProgress[index - 1]?.completed || false;
   };
 
@@ -149,7 +152,15 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
 
   // セクションアクティベーション
   const handleSectionActivate = (sectionIndex: number) => {
-    if (isSectionUnlocked(sectionIndex)) {
+    const isUnlocked = isSectionUnlocked(sectionIndex);
+    console.log(`Section ${sectionIndex} activation attempt:`, {
+      isUnlocked,
+      currentIndex: currentSectionIndex,
+      sectionTitle: lesson.sections[sectionIndex]?.title,
+      prevSectionCompleted: sectionIndex > 0 ? userProgress.sectionsProgress[sectionIndex - 1]?.completed : 'N/A'
+    });
+    
+    if (isUnlocked) {
       setCurrentSectionIndex(sectionIndex);
       handleProgressUpdate({
         sectionId: lesson.sections[sectionIndex].id,
@@ -190,6 +201,14 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentSectionIndex, lesson.sections.length]);
+
+  // パンくずナビゲーション
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'ホーム', href: '/', icon: <Home className="w-4 h-4" /> },
+    { label: 'コース', href: '/courses', icon: <BookOpen className="w-4 h-4" /> },
+    { label: 'Blender 3Dモデリング', href: `/learn/${courseId}` },
+    { label: lesson.title }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -247,6 +266,11 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* パンくずナビゲーション */}
+        <div className="mb-8">
+          <Breadcrumb items={breadcrumbItems} />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* メインコンテンツ */}
           <div className="lg:col-span-3">
@@ -274,22 +298,82 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                   <h3 className="text-2xl font-bold text-green-900 mb-2">
                     レッスン完了！
                   </h3>
-                  <p className="text-green-700 mb-4">
+                  <p className="text-green-700 mb-6">
                     すべてのセクションを完了しました。お疲れ様でした！
                   </p>
-                  <div className="flex justify-center space-x-4">
-                    <button
-                      onClick={() => navigate(`/courses/${courseId}`)}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      コースに戻る
-                    </button>
-                    <button
-                      onClick={() => navigate('/courses')}
-                      className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                    >
-                      他のコースを見る
-                    </button>
+                  
+                  {/* 学習統計 */}
+                  <div className="bg-white bg-opacity-50 rounded-lg p-4 mb-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <div className="font-semibold text-gray-900">学習時間</div>
+                        <div className="text-green-700">{Math.round(userProgress.timeSpent / 60)}分</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900">完了セクション</div>
+                        <div className="text-green-700">{completedSections}/{lesson.sections.length}</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900">達成バッジ</div>
+                        <div className="text-green-700">{userProgress.achievements.length}個</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900">進捗率</div>
+                        <div className="text-green-700">100%</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ナビゲーションオプション */}
+                  <div className="space-y-4">
+                    <div className="text-sm text-gray-600 mb-4">
+                      次に進む方法を選択してください
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <button
+                        onClick={() => {
+                          // 次のレッスンを取得
+                          const nextLesson = lesson.id === '1-1' ? '1-2' : null;
+                          if (nextLesson) {
+                            navigate(`/learn/${courseId}/${nextLesson}`);
+                          } else {
+                            navigate(`/learn/${courseId}`);
+                          }
+                        }}
+                        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                      >
+                        📚 次のレッスン
+                        <div className="text-xs mt-1 opacity-90">
+                          {lesson.id === '1-1' ? 'インターフェース操作' : 'ダッシュボード'}
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => navigate(`/learn/${courseId}`)}
+                        className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                      >
+                        📋 コース概要
+                        <div className="text-xs mt-1 opacity-90">
+                          全レッスン一覧
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => navigate('/courses')}
+                        className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                      >
+                        🚀 他のコース
+                        <div className="text-xs mt-1 opacity-90">
+                          新しい分野に挑戦
+                        </div>
+                      </button>
+                    </div>
+
+                    {/* 自動遷移の案内 */}
+                    <div className="text-xs text-gray-500 mt-4">
+                      💡 5秒後に自動的に次のレッスンに進みます（キャンセル可能）
+                    </div>
                   </div>
                 </div>
               </div>

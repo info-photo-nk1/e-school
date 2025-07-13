@@ -72,7 +72,7 @@ const BlenderCourse = () => {
                 </div>
               </div>
               <button 
-                onClick={() => navigate('/learn/3d-modeling/1-1')}
+                onClick={() => navigate('/learn/3d-modeling')}
                 className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-50 transition flex items-center"
               >
                 <Play className="w-5 h-5 mr-2" />
