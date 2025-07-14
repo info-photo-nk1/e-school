@@ -49,7 +49,7 @@ export interface MediaElement {
 
 export interface InteractiveElement {
   id: string;
-  type: 'checklist' | 'step-tracker' | 'simulator' | 'drag-drop' | 'hotspot';
+  type: 'checklist' | 'step-tracker' | 'simulator' | 'drag-drop' | 'hotspot' | 'blender-interface' | 'navigation-practice';
   title: string;
   description?: string;
   steps?: ChecklistStep[];

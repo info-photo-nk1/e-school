@@ -11,6 +11,7 @@ import {
 import InteractiveSectionCard from './InteractiveSectionCard';
 import ProgressTracker from './ProgressTracker';
 import { useTranslation } from '../../hooks/useTranslation';
+import { getTranslatedLesson } from '../../data/lessonTranslations';
 import Breadcrumb, { BreadcrumbItem } from '../Breadcrumb';
 
 interface EnhancedLessonContentProps {
@@ -27,7 +28,10 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
   onComplete
 }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
+  
+  // 翻訳されたレッスンデータを取得
+  const translatedLesson = getTranslatedLesson(lesson.id, currentLanguage.code);
   
   // プログレス状態の管理
   const [userProgress, setUserProgress] = useState<UserLessonProgress>({
@@ -63,8 +67,8 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
   // セクションが解除されているかチェック
   const isSectionUnlocked = (index: number) => {
     if (index === 0) return true; // 最初のセクションは常に解除
-    // Introduction to 3D Modeling レッスン(1-1)の場合、全てのセクションに自由にアクセス可能
-    if (lesson.id === '1-1') return true;
+    // Introduction to 3D Modeling レッスン(1-1)とBlender Interface Navigation レッスン(1-2)の場合、全てのセクションに自由にアクセス可能
+    if (lesson.id === '1-1' || lesson.id === '1-2') return true;
     return userProgress.sectionsProgress[index - 1]?.completed || false;
   };
 
@@ -105,8 +109,8 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
             const newAchievement: Achievement = {
               id: `section-${update.sectionId}`,
               type: 'completion',
-              title: 'セクション完了',
-              description: `セクション "${lesson.sections[sectionIndex]?.title}" を完了しました`,
+              title: t('achievements.sectionComplete'),
+              description: t('achievements.sectionCompleteDesc', { sectionTitle: lesson.sections[sectionIndex]?.title }),
               icon: '🎯',
               unlockedAt: update.timestamp,
               points: 10
@@ -131,8 +135,8 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
         const completionAchievement: Achievement = {
           id: `lesson-${lesson.id}`,
           type: 'milestone',
-          title: 'レッスン完了',
-          description: `レッスン "${lesson.title}" を完了しました！`,
+          title: t('achievements.lessonComplete'),
+          description: t('achievements.lessonCompleteDesc', { lessonTitle: translatedLesson?.title || lesson.title }),
           icon: '🏆',
           unlockedAt: new Date(),
           points: 50
@@ -204,10 +208,10 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
 
   // パンくずナビゲーション
   const breadcrumbItems: BreadcrumbItem[] = [
-    { label: 'ホーム', href: '/', icon: <Home className="w-4 h-4" /> },
-    { label: 'コース', href: '/courses', icon: <BookOpen className="w-4 h-4" /> },
-    { label: 'Blender 3Dモデリング', href: `/learn/${courseId}` },
-    { label: lesson.title }
+    { label: t('navigation.home'), href: '/', icon: <Home className="w-4 h-4" /> },
+    { label: t('navigation.courses'), href: '/courses', icon: <BookOpen className="w-4 h-4" /> },
+    { label: t('course.blender3d.title'), href: `/learn/${courseId}` },
+    { label: translatedLesson?.title || lesson.title }
   ];
 
   return (
@@ -227,7 +231,7 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
               <div className="flex items-center space-x-2">
                 <BookOpen className="w-5 h-5 text-blue-600" />
                 <h1 className="text-lg font-semibold text-gray-900 truncate max-w-md">
-                  {lesson.title}
+                  {translatedLesson?.title || lesson.title}
                 </h1>
               </div>
             </div>
@@ -296,29 +300,29 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                 <div className="text-center">
                   <div className="text-4xl mb-4">🎉</div>
                   <h3 className="text-2xl font-bold text-green-900 mb-2">
-                    レッスン完了！
+                    {t('lessonComplete.title')}
                   </h3>
                   <p className="text-green-700 mb-6">
-                    すべてのセクションを完了しました。お疲れ様でした！
+                    {t('lessonComplete.congratulations')}
                   </p>
                   
                   {/* 学習統計 */}
                   <div className="bg-white bg-opacity-50 rounded-lg p-4 mb-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <div className="font-semibold text-gray-900">学習時間</div>
-                        <div className="text-green-700">{Math.round(userProgress.timeSpent / 60)}分</div>
+                        <div className="font-semibold text-gray-900">{t('lessonComplete.studyTime')}</div>
+                        <div className="text-green-700">{Math.round(userProgress.timeSpent / 60)}{t('common.minutes')}</div>
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900">完了セクション</div>
+                        <div className="font-semibold text-gray-900">{t('lessonComplete.completedSections')}</div>
                         <div className="text-green-700">{completedSections}/{lesson.sections.length}</div>
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900">達成バッジ</div>
-                        <div className="text-green-700">{userProgress.achievements.length}個</div>
+                        <div className="font-semibold text-gray-900">{t('lessonComplete.achievements')}</div>
+                        <div className="text-green-700">{userProgress.achievements.length}{t('common.count')}</div>
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900">進捗率</div>
+                        <div className="font-semibold text-gray-900">{t('lessonComplete.progress')}</div>
                         <div className="text-green-700">100%</div>
                       </div>
                     </div>
@@ -327,7 +331,7 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                   {/* ナビゲーションオプション */}
                   <div className="space-y-4">
                     <div className="text-sm text-gray-600 mb-4">
-                      次に進む方法を選択してください
+                      {t('lessonComplete.nextStep')}
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -343,9 +347,9 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                         }}
                         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                       >
-                        📚 次のレッスン
+                        📚 {t('lessonComplete.nextLesson')}
                         <div className="text-xs mt-1 opacity-90">
-                          {lesson.id === '1-1' ? 'インターフェース操作' : 'ダッシュボード'}
+                          {lesson.id === '1-1' ? t('lessons.interfaceNavigation') : t('navigation.dashboard')}
                         </div>
                       </button>
                       
@@ -353,9 +357,9 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                         onClick={() => navigate(`/learn/${courseId}`)}
                         className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
                       >
-                        📋 コース概要
+                        📋 {t('lessonComplete.courseOverview')}
                         <div className="text-xs mt-1 opacity-90">
-                          全レッスン一覧
+                          {t('lessonComplete.allLessons')}
                         </div>
                       </button>
                       
@@ -363,16 +367,16 @@ const EnhancedLessonContent: React.FC<EnhancedLessonContentProps> = ({
                         onClick={() => navigate('/courses')}
                         className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
                       >
-                        🚀 他のコース
+                        🚀 {t('lessonComplete.otherCourses')}
                         <div className="text-xs mt-1 opacity-90">
-                          新しい分野に挑戦
+                          {t('lessonComplete.newChallenge')}
                         </div>
                       </button>
                     </div>
 
                     {/* 自動遷移の案内 */}
                     <div className="text-xs text-gray-500 mt-4">
-                      💡 5秒後に自動的に次のレッスンに進みます（キャンセル可能）
+                      💡 {t('lessonComplete.autoAdvance')}
                     </div>
                   </div>
                 </div>

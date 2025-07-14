@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { CheckCircle2, Circle, Lightbulb, ArrowRight } from 'lucide-react';
 import { InteractiveElement, ChecklistStep, SectionProgress } from '../../types/enhancedLesson';
+import BlenderInterfaceDemo from './BlenderInterfaceDemo';
+import NavigationPracticeTracker from './NavigationPracticeTracker';
 
 interface InteractiveElementRendererProps {
   element: InteractiveElement;
@@ -198,6 +200,20 @@ const InteractiveElementRenderer: React.FC<InteractiveElementRendererProps> = ({
       return renderChecklist();
     case 'step-tracker':
       return renderStepTracker();
+    case 'blender-interface':
+      return <BlenderInterfaceDemo />;
+    case 'navigation-practice':
+      console.log('Rendering NavigationPracticeTracker for element:', element.id);
+      try {
+        return <NavigationPracticeTracker onComplete={(exerciseId) => onComplete({ elementId: element.id, exerciseId })} />;
+      } catch (error) {
+        console.error('Error rendering NavigationPracticeTracker:', error);
+        return (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+            <p className="text-red-800">NavigationPracticeTracker エラー: {error instanceof Error ? error.message : 'Unknown error'}</p>
+          </div>
+        );
+      }
     default:
       return (
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">

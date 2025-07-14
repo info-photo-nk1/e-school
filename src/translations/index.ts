@@ -381,6 +381,51 @@ export const translations = {
       resources: 'Resources',
       company: 'Company',
       copyright: '© 2024 SkillsAI. All rights reserved.'
+    },
+    navigation: {
+      home: 'Home',
+      courses: 'Courses',
+      dashboard: 'Dashboard'
+    },
+    course: {
+      blender3d: {
+        title: 'Blender 3D Modeling'
+      }
+    },
+    achievements: {
+      sectionComplete: 'Section Complete',
+      sectionCompleteDesc: 'Completed section "{sectionTitle}"',
+      lessonComplete: 'Lesson Complete',
+      lessonCompleteDesc: 'Completed lesson "{lessonTitle}"!'
+    },
+    lessonComplete: {
+      title: 'Lesson Complete!',
+      congratulations: 'You have completed all sections. Great job!',
+      studyTime: 'Study Time',
+      completedSections: 'Completed Sections',
+      achievements: 'Achievement Badges',
+      progress: 'Progress',
+      nextStep: 'Choose how to proceed next',
+      nextLesson: 'Next Lesson',
+      courseOverview: 'Course Overview',
+      allLessons: 'All lessons overview',
+      otherCourses: 'Other Courses',
+      newChallenge: 'Challenge new areas',
+      autoAdvance: '💡 Automatically advance to next lesson in 5 seconds (cancelable)'
+    },
+    lessons: {
+      interfaceNavigation: 'Interface Navigation'
+    },
+    common: {
+      minutes: 'min',
+      count: 'items'
+    },
+    sectionTypes: {
+      introduction: 'Introduction',
+      concept: 'Concept',
+      demonstration: 'Demonstration',
+      practice: 'Practice',
+      challenge: 'Challenge'
     }
   },
   ja: {
@@ -758,6 +803,44 @@ export const translations = {
       resources: 'リソース',
       company: '会社情報',
       copyright: '© 2024 SkillsAI. All rights reserved.'
+    },
+    navigation: {
+      home: 'ホーム',
+      courses: 'コース',
+      dashboard: 'ダッシュボード'
+    },
+    course: {
+      blender3d: {
+        title: 'Blender 3Dモデリング'
+      }
+    },
+    achievements: {
+      sectionComplete: 'セクション完了',
+      sectionCompleteDesc: 'セクション "{sectionTitle}" を完了しました',
+      lessonComplete: 'レッスン完了',
+      lessonCompleteDesc: 'レッスン "{lessonTitle}" を完了しました！'
+    },
+    lessonComplete: {
+      title: 'レッスン完了！',
+      congratulations: 'すべてのセクションを完了しました。お疲れ様でした！',
+      studyTime: '学習時間',
+      completedSections: '完了セクション',
+      achievements: '達成バッジ',
+      progress: '進捗率',
+      nextStep: '次に進む方法を選択してください',
+      nextLesson: '次のレッスン',
+      courseOverview: 'コース概要',
+      allLessons: '全レッスン一覧',
+      otherCourses: '他のコース',
+      newChallenge: '新しい分野に挑戦',
+      autoAdvance: '💡 5秒後に自動的に次のレッスンに進みます（キャンセル可能）'
+    },
+    lessons: {
+      interfaceNavigation: 'インターフェース操作'
+    },
+    common: {
+      minutes: '分',
+      count: '個'
     }
   },
   // Add other languages similarly...

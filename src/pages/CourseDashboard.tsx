@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../hooks/useTranslation';
 import { blenderCourse } from '../data/blenderLessons';
+import { getTranslatedLesson } from '../data/lessonTranslations';
 import Breadcrumb, { BreadcrumbItem } from '../components/Breadcrumb';
 
 interface LessonProgress {
@@ -35,7 +36,7 @@ interface CourseStats {
 }
 
 const CourseDashboard = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
 
@@ -98,7 +99,7 @@ const CourseDashboard = () => {
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: t('courseDashboard.breadcrumb.home'), href: '/', icon: <Home className="w-4 h-4" /> },
     { label: t('courseDashboard.breadcrumb.courses'), href: '/courses', icon: <BookOpen className="w-4 h-4" /> },
-    { label: courseData.title }
+    { label: currentLanguage.code === 'ja' ? 'Blender入門' : courseData.title }
   ];
 
   return (
@@ -118,7 +119,7 @@ const CourseDashboard = () => {
               <div className="flex items-center space-x-2">
                 <BookOpen className="w-6 h-6 text-blue-600" />
                 <h1 className="text-xl font-bold text-gray-900">
-                  {courseData.title}
+                  {currentLanguage.code === 'ja' ? 'Blender入門' : courseData.title}
                 </h1>
               </div>
             </div>
@@ -150,7 +151,9 @@ const CourseDashboard = () => {
             {/* コース概要 */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('courseDashboard.overview.title')}</h2>
-              <p className="text-gray-600 mb-6">{courseData.description}</p>
+              <p className="text-gray-600 mb-6">
+                {currentLanguage.code === 'ja' ? 'Blenderの基礎と3Dモデリングの基本を学習します' : courseData.description}
+              </p>
               
               {/* 統計カード */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -182,9 +185,11 @@ const CourseDashboard = () => {
                       {t('courseDashboard.nextLesson.title')}
                     </h3>
                     <h4 className="text-lg font-semibold text-blue-900 mb-1">
-                      {nextLesson.title}
+                      {getTranslatedLesson(nextLesson.id, currentLanguage.code)?.title || nextLesson.title}
                     </h4>
-                    <p className="text-gray-600 mb-4">{nextLesson.description}</p>
+                    <p className="text-gray-600 mb-4">
+                      {getTranslatedLesson(nextLesson.id, currentLanguage.code)?.description || nextLesson.description}
+                    </p>
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
                       <span className="flex items-center">
                         <Clock className="w-4 h-4 mr-1" />
@@ -240,9 +245,11 @@ const CourseDashboard = () => {
                           
                           <div className="flex-grow">
                             <h3 className="text-lg font-semibold text-gray-900">
-                              {t('courseDashboard.lessonList.lesson')} {index + 1}: {lesson.title}
+                              {t('courseDashboard.lessonList.lesson')} {index + 1}: {getTranslatedLesson(lesson.id, currentLanguage.code)?.title || lesson.title}
                             </h3>
-                            <p className="text-gray-600">{lesson.description}</p>
+                            <p className="text-gray-600">
+                              {getTranslatedLesson(lesson.id, currentLanguage.code)?.description || lesson.description}
+                            </p>
                             <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
                               <span className="flex items-center">
                                 <Clock className="w-4 h-4 mr-1" />

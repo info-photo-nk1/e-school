@@ -1,4 +1,5 @@
 import { Lesson } from '../data/blenderLessons';
+import { getTranslatedLesson } from '../data/lessonTranslations';
 import { 
   EnhancedLesson, 
   LessonSection, 
@@ -9,17 +10,23 @@ import {
 } from '../types/enhancedLesson';
 
 // 既存のレッスンデータを新しい形式に変換
-export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
+export const convertLessonToEnhanced = (lesson: Lesson, language: string = 'en'): EnhancedLesson => {
+  // 翻訳されたレッスンデータを取得
+  const translatedLesson = getTranslatedLesson(lesson.id, language);
   // コンテンツをセクションに分割
   const sections: LessonSection[] = [];
   
   // Introduction to 3D Modeling レッスン専用の処理
   if (lesson.id === '1-1') {
     // 1. What is 3D Modeling?
+    // 翻訳されたコンテンツから最初のセクション部分を抽出
+    const content = translatedLesson?.content || lesson.content;
+    const firstSection = content.split('##')[1] || content.substring(0, 500);
+    
     sections.push({
       id: `${lesson.id}-what-is-3d`,
       type: 'concept',
-      title: 'What is 3D Modeling?',
+      title: language === 'ja' ? '3Dモデリングとは？' : 'What is 3D Modeling?',
       estimatedTime: 8,
       order: 0,
       content: {
@@ -28,38 +35,31 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             id: `${lesson.id}-what-is-3d-heading`,
             type: 'heading',
             level: 2,
-            content: 'What is 3D Modeling?'
+            content: language === 'ja' ? '3Dモデリングとは？' : 'What is 3D Modeling?'
           },
           {
-            id: `${lesson.id}-what-is-3d-definition`,
+            id: `${lesson.id}-what-is-3d-content`,
             type: 'paragraph',
-            content: '3D modeling is the process of creating a mathematical coordinate-based representation of any surface of an object in three dimensions via specialized software.'
-          },
-          {
-            id: `${lesson.id}-what-is-3d-explanation`,
-            type: 'paragraph',
-            content: '3Dモデリングは、特殊なソフトウェアを使用して、オブジェクトの表面を三次元で数学的に表現する技術です。現実世界の物体や想像上のキャラクターを仮想空間で作り出すことができます。'
-          },
-          {
-            id: `${lesson.id}-what-is-3d-uses`,
-            type: 'list',
-            content: '• 映画やアニメーションの制作\n• ゲーム開発\n• 建築や製品設計\n• 医療や科学的可視化\n• VR/ARコンテンツ制作'
+            content: firstSection.replace(/^#+ /, '').trim() || (translatedLesson?.description || lesson.description)
           }
         ]
       },
       completionCriteria: {
         type: 'time-based',
         requirements: {
-          minimumTime: 30  // 30秒に短縮でより早く次のセクションへ進める
+          minimumTime: 30
         }
       }
     });
 
-    // 2. Why Blender?
+    // 翻訳されたコンテンツから2番目のセクション部分を抽出
+    const contentSections = content.split('##');
+    const secondSection = contentSections[2] || 'Blender features and benefits';
+    
     sections.push({
       id: `${lesson.id}-why-blender`,
       type: 'concept',
-      title: 'Why Blender?',
+      title: language === 'ja' ? 'なぜBlender？' : 'Why Blender?',
       estimatedTime: 8,
       order: 1,
       content: {
@@ -68,45 +68,30 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             id: `${lesson.id}-why-blender-heading`,
             type: 'heading',
             level: 2,
-            content: 'Why Blender?'
+            content: language === 'ja' ? 'なぜBlender？' : 'Why Blender?'
           },
           {
-            id: `${lesson.id}-why-blender-intro`,
+            id: `${lesson.id}-why-blender-content`,
             type: 'paragraph',
-            content: 'Blender is a free and open-source 3D creation suite that supports the entirety of the 3D pipeline.'
-          },
-          {
-            id: `${lesson.id}-why-blender-features`,
-            type: 'callout',
-            style: 'info',
-            content: 'Blenderが支援する機能:'
-          },
-          {
-            id: `${lesson.id}-why-blender-list`,
-            type: 'list',
-            content: '• モデリング、リギング、アニメーション\n• シミュレーション、レンダリング\n• コンポジティングとモーショントラッキング\n• ビデオ編集とゲーム制作\n• スクリプティングとカスタマイゼーション'
-          },
-          {
-            id: `${lesson.id}-why-blender-advantages`,
-            type: 'callout',
-            style: 'success',
-            content: '完全無料でプロレベルの機能を提供し、活発なコミュニティサポートがあります'
+            content: secondSection.replace(/^#+ /, '').trim() || (language === 'ja' ? 'Blenderは無料でオープンソースの3D制作スイートです。' : 'Blender is a free and open-source 3D creation suite.')
           }
         ]
       },
       completionCriteria: {
         type: 'time-based',
         requirements: {
-          minimumTime: 30  // Why Blenderセクションも30秒に短縮
+          minimumTime: 30
         }
       }
     });
 
-    // 3. Course Overview
+    // 翻訳されたコンテンツから3番目のセクション部分を抽出
+    const thirdSection = contentSections[3] || 'Course learning objectives';
+    
     sections.push({
       id: `${lesson.id}-course-overview`,
       type: 'concept',
-      title: 'Course Overview',
+      title: language === 'ja' ? 'コース概要' : 'Course Overview',
       estimatedTime: 8,
       order: 2,
       content: {
@@ -115,29 +100,12 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             id: `${lesson.id}-course-overview-heading`,
             type: 'heading',
             level: 2,
-            content: 'Course Overview'
+            content: language === 'ja' ? 'コース概要' : 'Course Overview'
           },
           {
-            id: `${lesson.id}-course-overview-intro`,
+            id: `${lesson.id}-course-overview-content`,
             type: 'paragraph',
-            content: 'このコースでは、Blenderの基礎から実践的な3Dモデリングまでを段階的に学習します。'
-          },
-          {
-            id: `${lesson.id}-course-overview-objectives`,
-            type: 'callout',
-            style: 'info',
-            content: 'このコースで学ぶこと:'
-          },
-          {
-            id: `${lesson.id}-course-overview-list`,
-            type: 'list',
-            content: '1. **Basic Navigation** - 3D空間での移動方法\n2. **Essential Tools** - 最も頻繁に使用するツール\n3. **Modeling Techniques** - ゼロから3Dオブジェクトを作成\n4. **Materials & Texturing** - モデルをリアルに見せる方法\n5. **Lighting & Rendering** - 作品を生き生きとさせる技術'
-          },
-          {
-            id: `${lesson.id}-course-overview-project`,
-            type: 'callout',
-            style: 'success',
-            content: '最終プロジェクト: オリジナルロボットキャラクター "Robo-Friend" の制作'
+            content: thirdSection.replace(/^#+ /, '').trim() || (language === 'ja' ? 'このコースでは、Blenderの基礎から実践的な3Dモデリングまでを学習します。' : 'In this course, you will learn from Blender basics to practical 3D modeling.')
           }
         ]
       },
@@ -162,7 +130,7 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             {
               id: `${lesson.id}-video-intro`,
               type: 'paragraph',
-              content: 'Blenderの基本的な操作と今後のレッスンで学ぶ内容をプレビューします。'
+              content: language === 'ja' ? 'Blenderの基本的な操作と今後のレッスンで学ぶ内容をプレビューします。' : 'Preview of basic Blender operations and future lesson content.'
             }
           ],
           media: [
@@ -182,13 +150,257 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
         }
       });
     }
+  } else if (lesson.id === '1-2') {
+    // Blender Interface Navigation lesson専用の処理（30分版）
+    
+    // 1. イントロダクションと学習目標 (3分)
+    sections.push({
+      id: `${lesson.id}-intro`,
+      type: 'introduction',
+      title: `${translatedLesson?.title || lesson.title} - ${language === 'ja' ? '学習目標と概要' : 'Learning Objectives & Overview'}`,
+      estimatedTime: 3,
+      order: 0,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-intro-heading`,
+            type: 'heading',
+            level: 2,
+            content: translatedLesson?.title || lesson.title
+          },
+          {
+            id: `${lesson.id}-intro-desc`,
+            type: 'paragraph',
+            content: translatedLesson?.description || lesson.description
+          },
+          {
+            id: `${lesson.id}-learning-objectives`,
+            type: 'callout',
+            style: 'info',
+            content: language === 'ja' ? 
+              `このレッスンの学習目標:\n• Blenderの4つのメインエリアの完全理解\n• プロフェッショナルなナビゲーション技術の習得\n• 効率的なワークフロー構築の基礎\n• 高度なショートカットとカスタマイゼーション\n\n予想学習時間: ${lesson.duration}分` :
+              `Learning objectives:\n• Complete understanding of Blender's 4 main areas\n• Master professional navigation techniques\n• Foundation for efficient workflow\n• Advanced shortcuts and customization\n\nEstimated time: ${lesson.duration} minutes`
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 60
+        }
+      }
+    });
+
+    // 2. Blenderワークスペース深層理解 (5分)
+    sections.push({
+      id: `${lesson.id}-workspace-theory`,
+      type: 'concept',
+      title: language === 'ja' ? 'Blenderワークスペースの深層理解' : 'Deep Understanding of Blender Workspace',
+      estimatedTime: 5,
+      order: 1,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-philosophy`,
+            type: 'heading',
+            level: 3,
+            content: language === 'ja' ? 'インターフェース設計哲学' : 'Interface Design Philosophy'
+          },
+          {
+            id: `${lesson.id}-philosophy-desc`,
+            type: 'paragraph',
+            content: language === 'ja' ? 
+              'Blenderは「非破壊ワークフロー」の思想に基づいて設計されています。各パネルは特定の役割を持ち、相互連携することで効率的な3D制作環境を提供します。' :
+              'Blender is designed based on the philosophy of "non-destructive workflow". Each panel has a specific role and works together to provide an efficient 3D production environment.'
+          },
+          {
+            id: `${lesson.id}-workspace-benefits`,
+            type: 'callout',
+            style: 'success',
+            content: language === 'ja' ? 
+              '効率的なワークスペース活用のメリット:\n• 作業時間の大幅短縮\n• ミスの削減\n• クリエイティブフローの維持\n• プロフェッショナルな品質達成' :
+              'Benefits of efficient workspace usage:\n• Significant time savings\n• Error reduction\n• Maintaining creative flow\n• Achieving professional quality'
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'time-based',
+        requirements: {
+          minimumTime: 120
+        }
+      }
+    });
+
+    // 3. インタラクティブインターフェース探索 (7分)
+    sections.push({
+      id: `${lesson.id}-interface-demo`,
+      type: 'demonstration',
+      title: language === 'ja' ? 'インタラクティブインターフェース探索' : 'Interactive Interface Exploration',
+      estimatedTime: 7,
+      order: 2,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-interface-intro`,
+            type: 'paragraph',
+            content: language === 'ja' ? 
+              'Blenderの4つのメインエリアを対話的に学習しましょう。各エリアをクリックして、詳細な機能と使用方法を確認してください。' :
+              'Learn Blender\'s 4 main areas interactively. Click on each area to see detailed functions and usage.'
+          },
+          {
+            id: `${lesson.id}-exploration-tips`,
+            type: 'callout',
+            style: 'warning',
+            content: language === 'ja' ? 
+              '効果的な探索のコツ:\n• 各エリアの基本機能を理解してから詳細へ\n• 実際のBlenderと比較しながら学習\n• 疑問点はメモして後で調べる\n• ホバー効果と詳細説明を活用' :
+              'Tips for effective exploration:\n• Understand basic functions before details\n• Compare with actual Blender while learning\n• Note questions for later research\n• Use hover effects and detailed explanations'
+          }
+        ],
+        interactive: [
+          {
+            id: `${lesson.id}-interface-visualization`,
+            type: 'blender-interface',
+            title: language === 'ja' ? 'インタラクティブBlenderレイアウト' : 'Interactive Blender Layout',
+            description: language === 'ja' ? 'Blenderワークスペースの完全探索' : 'Complete Blender workspace exploration'
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'interaction-based',
+        requirements: {
+          requiredInteractions: [`${lesson.id}-interface-visualization`]
+        }
+      }
+    });
+
+    // 4. 基本ナビゲーション実習 (8分)
+    sections.push({
+      id: `${lesson.id}-basic-navigation`,
+      type: 'practice',
+      title: language === 'ja' ? '基本ナビゲーション実習' : 'Basic Navigation Practice',
+      estimatedTime: 8,
+      order: 3,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-basic-intro`,
+            type: 'paragraph',
+            content: language === 'ja' ? 
+              '実際のBlenderを使って基本的なナビゲーション技術を練習します。段階的に難易度が上がる練習プログラムを用意しました。' :
+              'Practice basic navigation techniques with actual Blender. We\'ve prepared progressive difficulty practice programs.'
+          },
+          {
+            id: `${lesson.id}-practice-preparation`,
+            type: 'callout',
+            style: 'info',
+            content: language === 'ja' ? 
+              '実習の準備:\n• Blenderを起動してデフォルトシーンを表示\n• マウスの中ボタンが機能することを確認\n• キーボードのテンキーをチェック\n• 画面を見やすい大きさに調整' :
+              'Practice preparation:\n• Launch Blender with default scene\n• Confirm middle mouse button functionality\n• Check keyboard numpad\n• Adjust screen to comfortable size'
+          }
+        ],
+        interactive: [
+          {
+            id: `${lesson.id}-basic-navigation-tracker`,
+            type: 'navigation-practice',
+            title: language === 'ja' ? '基本ナビゲーション練習' : 'Basic Navigation Practice',
+            description: language === 'ja' ? '段階的練習でマスタリング' : 'Progressive mastery practice',
+            steps: [] // Add empty steps array to satisfy interface
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'interaction-based',
+        requirements: {
+          requiredInteractions: [`${lesson.id}-basic-navigation-tracker`],
+          allStepsCompleted: true
+        }
+      }
+    });
+
+    // 5. 高度なナビゲーション技術 (7分)
+    sections.push({
+      id: `${lesson.id}-advanced-navigation`,
+      type: 'challenge',
+      title: language === 'ja' ? '高度なナビゲーション技術' : 'Advanced Navigation Techniques',
+      estimatedTime: 7,
+      order: 4,
+      content: {
+        text: [
+          {
+            id: `${lesson.id}-advanced-intro`,
+            type: 'heading',
+            level: 3,
+            content: language === 'ja' ? 'プロフェッショナルレベルの技術習得' : 'Professional Level Skill Acquisition'
+          },
+          {
+            id: `${lesson.id}-advanced-desc`,
+            type: 'paragraph',
+            content: language === 'ja' ? 
+              'より効率的で高度なナビゲーション技術を学習します。これらの技術により、複雑な3Dシーンでも迅速かつ正確に作業できるようになります。' :
+              'Learn more efficient and advanced navigation techniques. These skills will enable quick and accurate work even in complex 3D scenes.'
+          },
+          {
+            id: `${lesson.id}-shortcut-mastery`,
+            type: 'expandable',
+            content: language === 'ja' ? 'プロが使うショートカット集' : 'Professional Shortcuts Collection',
+            expandable: {
+              summary: language === 'ja' ? '高度なショートカット一覧' : 'Advanced Shortcuts List',
+              details: language === 'ja' ? 
+                'Ctrl+テンキー: 裏面ビュー\nテンキー2,4,6,8: 段階的回転\nAlt+Home: 分離表示\nShift+C: 3Dカーソルリセット\nL: リンク選択\nShift+L: 類似選択' :
+                'Ctrl+Numpad: Back view\nNumpad 2,4,6,8: Step rotation\nAlt+Home: Isolation display\nShift+C: 3D cursor reset\nL: Linked selection\nShift+L: Similar selection'
+            }
+          }
+        ],
+        interactive: [
+          {
+            id: `${lesson.id}-advanced-checklist`,
+            type: 'checklist',
+            title: language === 'ja' ? '高度な技術チェックリスト' : 'Advanced Techniques Checklist',
+            description: language === 'ja' ? '以下の技術を実際に試してマスターしましょう' : 'Try and master the following techniques',
+            steps: [
+              {
+                id: 'advanced-1',
+                instruction: language === 'ja' ? 'Ctrl+テンキー1で裏面ビューに切り替える' : 'Switch to back view with Ctrl+Numpad1',
+                description: language === 'ja' ? '正面の反対側から見る技術' : 'Technique to view from opposite of front',
+                hint: language === 'ja' ? 'テンキー1の後にCtrlを押しながらもう一度1を押す' : 'Press Ctrl+1 after numpad 1',
+                completed: false,
+                required: true
+              },
+              {
+                id: 'advanced-2', 
+                instruction: language === 'ja' ? 'テンキー2,4,6,8で段階的にビューを回転' : 'Rotate view step by step with numpad 2,4,6,8',
+                description: language === 'ja' ? '細かい角度調整のテクニック' : 'Technique for fine angle adjustment',
+                hint: language === 'ja' ? '各キーで15度ずつ回転する' : 'Each key rotates 15 degrees',
+                completed: false,
+                required: true
+              },
+              {
+                id: 'advanced-3',
+                instruction: language === 'ja' ? 'Shift+Cで3Dカーソルを中心にリセット' : 'Reset 3D cursor to center with Shift+C',
+                description: language === 'ja' ? '作業基準点のリセット' : 'Reset work reference point',
+                hint: language === 'ja' ? 'カーソルが原点(0,0,0)に戻る' : 'Cursor returns to origin (0,0,0)',
+                completed: false,
+                required: true
+              }
+            ]
+          }
+        ]
+      },
+      completionCriteria: {
+        type: 'interaction-based',
+        requirements: {
+          requiredInteractions: [`${lesson.id}-advanced-checklist`],
+          allStepsCompleted: true
+        }
+      }
+    });
   } else {
     // 他のレッスン用の既存の処理
     // 1. イントロダクションセクション
     sections.push({
       id: `${lesson.id}-intro`,
       type: 'introduction',
-      title: `${lesson.title} - 概要`,
+      title: `${translatedLesson?.title || lesson.title} - ${language === 'ja' ? '概要' : 'Overview'}`,
       estimatedTime: Math.ceil(lesson.duration * 0.2), // 20%の時間を概要に
       order: 0,
       content: {
@@ -197,18 +409,18 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             id: `${lesson.id}-intro-heading`,
             type: 'heading',
             level: 2,
-            content: lesson.title
+            content: translatedLesson?.title || lesson.title
           },
           {
             id: `${lesson.id}-intro-desc`,
             type: 'paragraph',
-            content: lesson.description
+            content: translatedLesson?.description || lesson.description
           },
           {
             id: `${lesson.id}-intro-time`,
             type: 'callout',
             style: 'info',
-            content: `このレッスンの予想学習時間: ${lesson.duration}分`
+            content: language === 'ja' ? `このレッスンの予想学習時間: ${lesson.duration}分` : `Estimated learning time: ${lesson.duration} minutes`
           }
         ]
       },
@@ -221,12 +433,12 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
     });
 
     // 2. メインコンテンツセクション
-    const contentSections = parseContentIntoSections(lesson.content, lesson.id);
+    const contentSections = parseContentIntoSections(translatedLesson?.content || lesson.content, lesson.id);
     sections.push(...contentSections);
   }
 
   // 3. 動画セクション（動画がある場合、他のレッスン用）
-  if (lesson.videoUrl && lesson.id !== '1-1') {
+  if (lesson.videoUrl && lesson.id !== '1-1' && lesson.id !== '1-2') {
     sections.push({
       id: `${lesson.id}-video`,
       type: 'demonstration',
@@ -252,12 +464,12 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
     });
   }
 
-  // 4. 演習セクション（演習がある場合）
-  if (lesson.exercises && lesson.exercises.length > 0) {
+  // 4. 演習セクション（演習がある場合、他のレッスン用）
+  if (lesson.exercises && lesson.exercises.length > 0 && lesson.id !== '1-2') {
     sections.push({
       id: `${lesson.id}-exercises`,
       type: 'practice',
-      title: '実習課題',
+      title: language === 'ja' ? '実習課題' : 'Practice Exercises',
       estimatedTime: Math.ceil(lesson.duration * 0.4), // 40%の時間を演習に
       order: sections.length,
       content: {
@@ -272,7 +484,7 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
             description: index === exercise.instructions.length - 1 ? exercise.solution : undefined,
             completed: false,
             required: true,
-            hint: index === 0 ? '最初のステップから始めましょう' : undefined
+            hint: index === 0 ? (language === 'ja' ? '最初のステップから始めましょう' : 'Let\'s start with the first step') : undefined
           }))
         }))
       },
@@ -286,18 +498,20 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
     });
   }
 
-  // 5. クイズセクション（理解度チェック）
-  const quizSection = createQuizSection(lesson);
-  if (quizSection) {
-    sections.push(quizSection);
+  // 5. クイズセクション（理解度チェック、他のレッスン用）
+  if (lesson.id !== '1-2') {
+    const quizSection = createQuizSection(lesson, language);
+    if (quizSection) {
+      sections.push(quizSection);
+    }
   }
 
-  // 6. リソースセクション（リソースがある場合）
-  if (lesson.resources && lesson.resources.length > 0) {
+  // 6. リソースセクション（リソースがある場合、他のレッスン用）
+  if (lesson.resources && lesson.resources.length > 0 && lesson.id !== '1-2') {
     sections.push({
       id: `${lesson.id}-resources`,
       type: 'concept',
-      title: 'リソース・参考資料',
+      title: language === 'ja' ? 'リソース・参考資料' : 'Resources & References',
       estimatedTime: 5,
       order: sections.length,
       content: {
@@ -305,7 +519,7 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
           {
             id: `${lesson.id}-resources-intro`,
             type: 'paragraph',
-            content: 'このレッスンに関連する追加リソースです。ダウンロードや参照にご活用ください。'
+            content: language === 'ja' ? 'このレッスンに関連する追加リソースです。ダウンロードや参照にご活用ください。' : 'Additional resources related to this lesson. Please use them for downloads and reference.'
           }
         ],
         media: lesson.resources.map(resource => ({
@@ -324,12 +538,12 @@ export const convertLessonToEnhanced = (lesson: Lesson): EnhancedLesson => {
 
   return {
     id: lesson.id,
-    title: lesson.title,
-    description: lesson.description,
+    title: translatedLesson?.title || lesson.title,
+    description: translatedLesson?.description || lesson.description,
     sections,
     totalEstimatedTime: lesson.duration,
     difficulty: 'beginner', // デフォルトで初級
-    learningObjectives: extractLearningObjectives(lesson.content),
+    learningObjectives: extractLearningObjectives(translatedLesson?.content || lesson.content, language),
     tags: extractTags(lesson),
     version: '1.0'
   };
@@ -462,21 +676,26 @@ const getSectionType = (title: string, index: number): LessonSection['type'] => 
 };
 
 // クイズセクションの生成
-const createQuizSection = (lesson: Lesson): LessonSection | null => {
+const createQuizSection = (lesson: Lesson, language: string = 'en'): LessonSection | null => {
+  // 翻訳されたレッスンデータを取得
+  const translatedLesson = getTranslatedLesson(lesson.id, language);
+  const lessonTitle = translatedLesson?.title || lesson.title;
+  const lessonDescription = translatedLesson?.description || lesson.description;
+  
   // レッスン内容に基づいて自動的にクイズを生成
   const quiz: QuizElement[] = [
     {
       id: `${lesson.id}-quiz-1`,
       type: 'multiple-choice',
-      question: `${lesson.title}の主な目的は何ですか？`,
+      question: language === 'ja' ? `${lessonTitle}の主な目的は何ですか？` : `What is the main purpose of ${lessonTitle}?`,
       options: [
-        lesson.description,
-        '別の学習目標',
-        '関連のない内容',
-        '上記のすべて'
+        lessonDescription,
+        language === 'ja' ? '別の学習目標' : 'Different learning objective',
+        language === 'ja' ? '関連のない内容' : 'Unrelated content',
+        language === 'ja' ? '上記のすべて' : 'All of the above'
       ],
-      correctAnswer: lesson.description,
-      explanation: `正解です。${lesson.title}は${lesson.description}を目的としています。`,
+      correctAnswer: lessonDescription,
+      explanation: language === 'ja' ? `正解です。${lessonTitle}は${lessonDescription}を目的としています。` : `Correct! ${lessonTitle} aims to ${lessonDescription}.`,
       points: 10
     }
   ];
@@ -484,7 +703,7 @@ const createQuizSection = (lesson: Lesson): LessonSection | null => {
   return {
     id: `${lesson.id}-quiz`,
     type: 'challenge',
-    title: '理解度チェック',
+    title: language === 'ja' ? '理解度チェック' : 'Understanding Check',
     estimatedTime: 5,
     order: 999, // 最後に配置
     content: { quiz },
@@ -498,7 +717,7 @@ const createQuizSection = (lesson: Lesson): LessonSection | null => {
 };
 
 // 学習目標の抽出
-const extractLearningObjectives = (content: string): string[] => {
+const extractLearningObjectives = (content: string, language: string = 'en'): string[] => {
   const objectives: string[] = [];
   const lines = content.split('\n');
   
@@ -507,7 +726,9 @@ const extractLearningObjectives = (content: string): string[] => {
   lines.forEach(line => {
     const trimmed = line.trim();
     
-    if (trimmed.includes('学習内容') || trimmed.includes('この講座では') || trimmed.includes('学びます')) {
+    // 日本語と英語の両方の学習目標セクションを検出
+    if (trimmed.includes('学習内容') || trimmed.includes('この講座では') || trimmed.includes('学びます') ||
+        trimmed.includes('you\'ll learn') || trimmed.includes('learning objectives') || trimmed.includes('In this course')) {
       inObjectiveSection = true;
     } else if (trimmed.startsWith('- ') && inObjectiveSection) {
       objectives.push(trimmed.substring(2));
@@ -518,7 +739,11 @@ const extractLearningObjectives = (content: string): string[] => {
   
   // デフォルトの学習目標
   if (objectives.length === 0) {
-    objectives.push('基本概念の理解', '実践的なスキルの習得', '応用力の向上');
+    if (language === 'ja') {
+      objectives.push('基本概念の理解', '実践的なスキルの習得', '応用力の向上');
+    } else {
+      objectives.push('Understanding basic concepts', 'Acquiring practical skills', 'Improving application abilities');
+    }
   }
   
   return objectives.slice(0, 5); // 最大5個

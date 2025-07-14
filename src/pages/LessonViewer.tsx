@@ -10,7 +10,7 @@ import { convertLessonToEnhanced } from '../utils/lessonConverter';
 import { UserLessonProgress } from '../types/enhancedLesson';
 
 const LessonViewer = () => {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const { courseId, lessonId } = useParams<{ courseId: string; lessonId: string }>();
   const navigate = useNavigate();
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -85,7 +85,8 @@ const LessonViewer = () => {
 
   // 新しいEnhancedUIを使用する場合
   if (useEnhancedView) {
-    const enhancedLesson = convertLessonToEnhanced(currentLesson);
+    const enhancedLesson = convertLessonToEnhanced(currentLesson, currentLanguage.code);
+    
     
     const handleProgressUpdate = (progress: UserLessonProgress) => {
       console.log('Progress updated:', progress);
